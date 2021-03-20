@@ -154,31 +154,60 @@ public class LinkedTree<T> implements Tree<T> {
 
 	// TODO parentheticRepresentation
 	public String parentheticRepresentation(Tree<T> T, Position<T> v) {
-		String s = "\"" + v.element().toString() + "\"";
+		String s = v.element().toString();
+		String tabs = "";
+		int contTabs = depth(T, v);
 		if (T.isInternal(v)) {
 			Boolean firstTime = true;
 			for (Position<T> w : T.children(v)) {
 				if (firstTime) {
-					s += "(\n" + "\t" + parentheticRepresentation(T, w);
+					for (int i = 0; i <= contTabs; i++) {
+						tabs += "\t";
+					}
+					s += " (\n" + tabs + parentheticRepresentation(T, w);
 					firstTime = false;
 				} else {
-					s += "," + parentheticRepresentation(T, w);
+					s += ",\n" + tabs + parentheticRepresentation(T, w);
 				}
-				s += ")";
 			}
+			if(!firstTime)
+				s += "\n" + tabs.substring(0, tabs.length()-1) + ")";
 		}
+//		tabs = tabs.substring(0, tabs.length() - 1);
 		return s;
 	}
+
+//	// TODO parentheticRepresentation
+//	public String parentheticRepresentation(Tree<T> T, Position<T> v) {
+//		String s = "\"" + v.element().toString() + "\"";
+//		String tabs = "";
+//		int contTabs = 0;
+//		if (T.isInternal(v)) {
+//			Boolean firstTime = true;
+//			for (Position<T> w : T.children(v)) {
+//				if (firstTime) {
+//					contTabs++;
+//					for (int i = 0; i < contTabs; i++) {
+//						tabs += "\t";
+//					}
+//					s += "(\n" + tabs + parentheticRepresentation(T, w);
+//					firstTime = false;
+//				} else {
+//					s += ",\n" + tabs + parentheticRepresentation(T, w);
+//				}
+//			}
+//			s += "\n" + tabs + ")";
+//		}
+//		return s;
+//	}
 
 	// TODO toStringPostorder
 	public String toStringPostorder(Tree<T> T, Position<T> v) {
 		String s = "";
-		if (T.isInternal(v)) {
-			for (Position<T> w : children(v))
-				toStringPostorder(T, w);
-			Position<T> temp = checkPosition(v);
-			s += temp.element().toString();
-		}
+		for (Position<T> w : children(v))
+			s += toStringPostorder(T, w);
+		Position<T> temp = checkPosition(v);
+		s += temp.element().toString() + "\n";
 		return s;
 	}
 
