@@ -14,16 +14,23 @@ class LinkedBinaryTreeTest {
 	void test() {
 		String exp = "((((3+1)*3)/((9-5)+2))-((3*(7-4))+6))";
 		LinkedBinaryTree<Character> t = buildExpression(exp);
+		// binaryPreorder Test
 		t.binaryPreorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		// binaryPostorder Test
 		t.binaryPostorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		// evaluateExpression Test
 		System.out.println(evaluateExpression(t, (BTNode<Character>) t.root()));
+		// inorder Test
 		t.inorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		// makerBTSearch Test
 		makeBTSearchTest();
+		// eulerTour Test
 		t.eulerTour(t, (BTNode<Character>) t.root());
 		System.out.println();
+		// printExpression Test
 		t.printExpression(t, t.root());
 	}
 	
