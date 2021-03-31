@@ -28,6 +28,18 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 	public int size() {
 		return size;
 	}
+	
+	// Seta o número de nodos da árvore
+	public void setSizeTree() {
+		int c = 0;
+		for (Position<T> i : positions()) {
+			if (this.checkPosition(i) != null)
+				c++;
+		}
+		while (this.size < c) {
+			this.size++;
+		}
+	}
 
 	// Retorna se um nodo é interno.
 	public boolean isInternal(Position<T> v) throws InvalidPositionException {
@@ -95,8 +107,25 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 		if (hasLeft(v))
 			inorderPositions(left(v), pos);
 		pos.addLast(v);
-		if(hasRight(v))
+		if (hasRight(v))
 			inorderPositions(right(v), pos);
+	}
+	
+
+	// Retorna uma coleção iterável (desorder) contendo os nodos da árvore.
+	public Iterable<Position<T>> positionsDesorder() {
+		PositionList<Position<T>> positions = new NodePositionList<Position<T>>();
+		if (size != 0)
+			desorderPositions(root(), positions); // atribui as posições usando caminhamento prefixado
+		return positions;
+	}
+
+	protected void desorderPositions(Position<T> v, PositionList<Position<T>> pos) {
+		if (hasRight(v))
+			inorderPositions(right(v), pos);
+		pos.addLast(v);
+		if (hasLeft(v))
+			inorderPositions(left(v), pos);
 	}
 
 	// Retorna uma coleção iterável contendo os nodos da árvore.
@@ -310,8 +339,8 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 			inorder(T, (BTNode<T>) v.getRight());
 		}
 	}
-	
-	// Implementação makerBTSearch
+
+	// 5. f) makerBTSearch e exiba o seu caminhamento inorder conforme slide 45.
 	public void makerBTSearch(LinkedBinaryTree<T> T, Position<T> v) {
 		String s = "";
 		for (Position<T> i : positionsInorder()) {
@@ -319,7 +348,53 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 		}
 		System.out.println(s.substring(0, s.length() - 2));
 	}
+
+	// 5. g) Método que desenhe a árvore binária de expressão conforme slide 47.
+	protected int toDraw(T m[][], Position<T> v, int lin, int col) {
+		if (hasLeft(v))
+			col = toDraw(m, left(v), lin + 1, col);
+		m[lin][col] = v.element();
+		col += 1;
+		if (hasRight(v))
+			col = toDraw(m, right(v), lin + 1, col);
+		return col;
+	}
 	
+	// Max
+	public int Max(int x, int y) {
+		return x > y ? x : y;
+	}
+
+	// height
+	public int height(LinkedBinaryTree<T> T, Position<T> v) {
+		if (isExternal(v))
+			return 0;
+		else {
+			int h = 0;
+			for (Position<T> w : children(v))
+				h = Max(h, height(T, w));
+			return 1 + h;
+		}
+	}
+	
+	// Desenha a árvore. (exercício 5 letra g)
+	public void drawBinaryTree(LinkedBinaryTree<T> a, Position<T> p) {
+		@SuppressWarnings("unchecked")
+		T[][] m = (T[][]) new Object[height(a, p) + 1][a.size()];
+
+		toDraw(m, a.root(), 0, 0);
+
+		for (int i = 0; i < m.length; i++) {
+			for (int j = 0; j < m[0].length; j++) {
+				if (m[i][j] == null)
+					System.out.printf(" ");
+				else
+					System.out.printf(m[i][j] + "");
+			}
+			System.out.println(); // quebra de linha
+		}
+	}
+
 	// 5. h) eulerTour conforme slide 51.
 	public void eulerTour(LinkedBinaryTree<T> T, BTNode<T> v) {
 		BTNode<T> l = (BTNode<T>) this.checkPosition(v);
@@ -335,31 +410,21 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 		BTNode<T> r = (BTNode<T>) this.checkPosition(v);
 		System.out.print(r.element().toString());
 	}
-	
+
 	// 5. i) printExpression conforme slide 53.
 	public void printExpression(LinkedBinaryTree<T> T, Position<T> v) {
-		if (T.isInternal(v)) System.out.print("(");
-		if (T.hasLeft(v)) printExpression(T, T.left(v));
-		if (T.isInternal(v)) System.out.print(v.element().toString());
-		else System.out.print(v.element().toString());
-		if (T.hasRight(v)) printExpression(T, T.right(v));
-		if (T.isInternal(v)) System.out.print(")");
-	}
-	
-	// Retorna uma coleção iterável (desorder) contendo os nodos da árvore.
-	public Iterable<Position<T>> positionsDesorder() {
-		PositionList<Position<T>> positions = new NodePositionList<Position<T>>();
-		if (size != 0)
-			desorderPositions(root(), positions); // atribui as posições usando caminhamento prefixado
-		return positions;
-	}
-
-	protected void desorderPositions(Position<T> v, PositionList<Position<T>> pos) {
-		if (hasRight(v))
-			inorderPositions(right(v), pos);
-		pos.addLast(v);
-		if (hasLeft(v))
-			inorderPositions(left(v), pos);
+		if (T.isInternal(v))
+			System.out.print("(");
+		if (T.hasLeft(v))
+			printExpression(T, T.left(v));
+		if (T.isInternal(v))
+			System.out.print(v.element().toString());
+		else
+			System.out.print(v.element().toString());
+		if (T.hasRight(v))
+			printExpression(T, T.right(v));
+		if (T.isInternal(v))
+			System.out.print(")");
 	}
 
 	// 5. j) Método para contar os nodos esquerdos e externos de uma árvore binária.
@@ -384,56 +449,5 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 				c++;
 		}
 		return c;
-	}
-
-	// Max
-	public int Max(int x, int y) {
-		return x > y ? x : y;
-	}
-	// height
-	public int height(LinkedBinaryTree<T> T, Position<T> v) {
-		if (isExternal(v))
-			return 0;
-		else {
-			int h = 0;
-			for (Position<T> w : children(v))
-				h = Max(h, height(T, w));
-			return 1 + h;
-		}
-	}
-	
-	protected int toDraw(T m[][], Position<T> v, int lin, int col) {
-		if (hasLeft(v))
-			col = toDraw(m, left(v), lin+1, col);
-		m[lin][col] = v.element();
-		col+=1;
-		if(hasRight(v))
-			col = toDraw(m, right(v), lin+1, col);
-		return col;
-	}
-	
-	protected void setSizeTree() {
-		for (@SuppressWarnings("unused") Position<T> i : positions()) {
-			this.size++;
-		}
-	}
-	
-	// Desenha a árvore. (exercício 5 letra g)
-	public void drawBinaryTree(LinkedBinaryTree<T> a, Position<T> p) {
-		setSizeTree();
-		@SuppressWarnings("unchecked")
-		T[][] m = (T[][]) new Object[height(a, p) + 1][a.size()];
-		
-		toDraw(m, a.root(), 0, 0);
-		
-		for (int i = 0; i < m.length; i++) {
-			for (int j = 0; j < m[0].length; j++) {
-				if(m[i][j] == null)
-					System.out.printf(" ");
-				else
-					System.out.printf(m[i][j] + "");
-			}
-			System.out.println(); // quebra de linha
-		}
 	}
 }

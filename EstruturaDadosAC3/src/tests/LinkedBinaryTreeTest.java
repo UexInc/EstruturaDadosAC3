@@ -55,10 +55,10 @@ class LinkedBinaryTreeTest {
 		System.out.println("\n--- Exercício 5 . i ---");
 		// printExpression Test
 		t.printExpression(t, t.root());
+		System.out.println();
 		
 		System.out.println("\n--- Exercício 5 . j ---");
 		// countLeftNodes Test
-		System.out.println();
 		System.out.println(t.countLeftNodes(t, t.root()));
 		
 		System.out.println("\n--- Exercício 5 . k ---");
@@ -86,9 +86,9 @@ class LinkedBinaryTreeTest {
 		Position<String> bsd = lbt.right(lbt.root());
 		assertEquals("FreeBSD", lbt.insertLeft(bsd, "FreeBSD").element(), "FreeBSD");
 		assertEquals("NetBSD", lbt.insertRight(bsd, "NetBSD").element(), "NetBSD");
-//		lbt.drawBinaryTree(lbt, lbt.root());
 	}
 	
+	// Tudo que envolve expressões
 	// 5. a) buildExpression conforme slide 30.
 	public LinkedBinaryTree<Character> buildExpression(String e) {
 		ArrayStack<LinkedBinaryTree<Character>> s = new ArrayStack<LinkedBinaryTree<Character>>();
@@ -105,6 +105,7 @@ class LinkedBinaryTreeTest {
 				LinkedBinaryTree<Character> t1 = s.pop();
 				t.attach(t.root(), t1, t2);
 				s.push(t);
+				t.setSizeTree();
 			}
 		}
 		return s.pop();
@@ -130,8 +131,6 @@ class LinkedBinaryTreeTest {
 		return Double.parseDouble(v.element().toString());
 	}
 	
-	// 5. f) makerBTSearch e exiba o seu caminhamento inorder conforme slide 45.
-	
 	public LinkedBinaryTree<Integer> createTreeSearch() {
 		LinkedBinaryTree<Integer> t = new LinkedBinaryTree<Integer>();
 		t.addRoot(56);
@@ -150,5 +149,7 @@ class LinkedBinaryTreeTest {
 		LinkedBinaryTree<Integer> search_tree = createTreeSearch();
 		search_tree.makerBTSearch(search_tree, search_tree.root());
 	}
+	
+	// Restante das questões da 5 implementadas na LinkedBinaryTree
 	
 }
