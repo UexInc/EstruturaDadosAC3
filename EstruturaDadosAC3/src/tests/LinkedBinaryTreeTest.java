@@ -13,7 +13,30 @@ import me.javacourse.Types.Position;
 import me.javacourse.stack.ArrayStack;
 
 class LinkedBinaryTreeTest {
+	
+	// 4. Implemente e teste o TAD Árvore Binária conforme slides de 15 a 26
+	@Test
+	void binaryTreeTest() {
+		LinkedBinaryTree<String> lbt = new LinkedBinaryTree<String>();
+		lbt.addRoot("Unix");
+		assertEquals("Unix", lbt.root().element(), "Unix");
+		assertEquals("Linux", lbt.insertLeft(lbt.root(), "Linux").element(), "Linux");
+		assertEquals("BSD", lbt.insertRight(lbt.root(), "BSD").element(), "BSD");
+		assertEquals(false, lbt.isEmpty(), "Deveria retornar false");
+		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.isInternal(null); });
+		Position<String> linux = lbt.left(lbt.root());
+		assertEquals("Ubuntu", lbt.insertLeft(linux, "Ubuntu").element(), "Ubuntu");
+		assertEquals("Android", lbt.insertRight(linux, "Android").element(), "Android");
+		Position<String> ubuntu = lbt.left(linux);
+		assertEquals("Ubuntu 13", lbt.insertLeft(ubuntu, "Ubuntu 13").element(), "Ubuntu 13");
+		assertEquals("Ubuntu Touch", lbt.insertRight(ubuntu, "Ubuntu Touch").element(), "Ubuntu Touch");
+		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.insertLeft(ubuntu, "teste"); });
+		Position<String> bsd = lbt.right(lbt.root());
+		assertEquals("FreeBSD", lbt.insertLeft(bsd, "FreeBSD").element(), "FreeBSD");
+		assertEquals("NetBSD", lbt.insertRight(bsd, "NetBSD").element(), "NetBSD");
+	}
 
+	// 5. Tests
 	@Test
 	void test() {
 		System.out.println("\n--- Exercício 5 . a ---");
@@ -66,27 +89,6 @@ class LinkedBinaryTreeTest {
 		System.out.println(t.countRightNodes(t, t.root()));
 	}
 	
-	// Exercício 4
-	@Test
-	void binaryTreeTest() {
-		LinkedBinaryTree<String> lbt = new LinkedBinaryTree<String>();
-		lbt.addRoot("Unix");
-		assertEquals("Unix", lbt.root().element(), "Unix");
-		assertEquals("Linux", lbt.insertLeft(lbt.root(), "Linux").element(), "Linux");
-		assertEquals("BSD", lbt.insertRight(lbt.root(), "BSD").element(), "BSD");
-		assertEquals(false, lbt.isEmpty(), "Deveria retornar false");
-		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.isInternal(null); });
-		Position<String> linux = lbt.left(lbt.root());
-		assertEquals("Ubuntu", lbt.insertLeft(linux, "Ubuntu").element(), "Ubuntu");
-		assertEquals("Android", lbt.insertRight(linux, "Android").element(), "Android");
-		Position<String> ubuntu = lbt.left(linux);
-		assertEquals("Ubuntu 13", lbt.insertLeft(ubuntu, "Ubuntu 13").element(), "Ubuntu 13");
-		assertEquals("Ubuntu Touch", lbt.insertRight(ubuntu, "Ubuntu Touch").element(), "Ubuntu Touch");
-		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.insertLeft(ubuntu, "teste"); });
-		Position<String> bsd = lbt.right(lbt.root());
-		assertEquals("FreeBSD", lbt.insertLeft(bsd, "FreeBSD").element(), "FreeBSD");
-		assertEquals("NetBSD", lbt.insertRight(bsd, "NetBSD").element(), "NetBSD");
-	}
 	
 	// Tudo que envolve expressões
 	// 5. a) buildExpression conforme slide 30.
