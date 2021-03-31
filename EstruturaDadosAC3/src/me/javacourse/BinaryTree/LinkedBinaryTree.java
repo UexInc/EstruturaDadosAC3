@@ -429,7 +429,7 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 	}
 
 	// 5. j) Método para contar os nodos esquerdos e externos de uma árvore binária.
-	public int countLeftNodes(LinkedBinaryTree<T> T, Position<T> v) {
+	public int countLeftExternalNodes(LinkedBinaryTree<T> T) {
 		int c = 0;
 		for (Position<T> temp : positionsInorder()) {
 			if (T.isRoot(temp))
@@ -441,7 +441,7 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 	}
 
 	// 5. k) Método para contar os nodos direitos e externos de uma árvore binária.
-	public int countRightNodes(LinkedBinaryTree<T> T, Position<T> v) {
+	public int countRightExternalNodes(LinkedBinaryTree<T> T) {
 		int c = 0;
 		for (Position<T> temp : positionsDesorder()) {
 			if (T.isRoot(temp))

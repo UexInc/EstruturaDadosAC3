@@ -83,11 +83,11 @@ class LinkedBinaryTreeTest {
 		
 		System.out.println("\n--- Exercício 5 . j ---");
 		// countLeftNodes Test
-		System.out.println(t.countLeftNodes(t, t.root()));
+		System.out.println(t.countLeftExternalNodes(t));
 		
 		System.out.println("\n--- Exercício 5 . k ---");
 		// countRightNodes Test
-		System.out.println(t.countRightNodes(t, t.root()));
+		System.out.println(t.countRightExternalNodes(t));
 	}
 	
 	
