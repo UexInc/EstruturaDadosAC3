@@ -36,6 +36,7 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 			if (this.checkPosition(i) != null)
 				c++;
 		}
+		if(this.size > c) this.size = 0;
 		while (this.size < c) {
 			this.size++;
 		}
