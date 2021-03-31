@@ -42,6 +42,7 @@ class LinkedBinaryTreeTest {
 		System.out.println("\n--- Exercício 5 . a ---");
 		String exp = "((((3+1)*3)/((9-5)+2))-((3*(7-4))+6))";
 		LinkedBinaryTree<Character> t = buildExpression(exp);
+		if(t != null) System.out.println("Arvore gerada a partir da expressão: " + exp);
 		
 		System.out.println("\n--- Exercício 5 . b ---");
 		// binaryPreorder Test
