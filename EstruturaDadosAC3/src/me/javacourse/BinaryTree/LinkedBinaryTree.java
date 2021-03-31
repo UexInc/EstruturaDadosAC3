@@ -164,12 +164,12 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 		return ww;
 	}
 
-	// Insere o filho da esquerda em um nodo.
+	// Insere o filho da direita em um nodo.
 	public Position<T> insertRight(Position<T> v, T e) throws InvalidPositionException {
 		BTPosition<T> vv = checkPosition(v);
 		Position<T> rightPos = (Position<T>) vv.getRight();
 		if (rightPos != null)
-			throw new InvalidPositionException("Node already has a left child");
+			throw new InvalidPositionException("Node already has a right child");
 		BTPosition<T> ww = createNode(e, vv, null, null);
 		vv.setRight(ww);
 		size++;
@@ -344,5 +344,96 @@ public class LinkedBinaryTree<T> implements BinaryTree<T> {
 		else System.out.print(v.element().toString());
 		if (T.hasRight(v)) printExpression(T, T.right(v));
 		if (T.isInternal(v)) System.out.print(")");
+	}
+	
+	// Retorna uma coleção iterável (desorder) contendo os nodos da árvore.
+	public Iterable<Position<T>> positionsDesorder() {
+		PositionList<Position<T>> positions = new NodePositionList<Position<T>>();
+		if (size != 0)
+			desorderPositions(root(), positions); // atribui as posições usando caminhamento prefixado
+		return positions;
+	}
+
+	protected void desorderPositions(Position<T> v, PositionList<Position<T>> pos) {
+		if (hasRight(v))
+			inorderPositions(right(v), pos);
+		pos.addLast(v);
+		if (hasLeft(v))
+			inorderPositions(left(v), pos);
+	}
+
+	// 5. j) Método para contar os nodos esquerdos e externos de uma árvore binária.
+	public int countLeftNodes(LinkedBinaryTree<T> T, Position<T> v) {
+		int c = 0;
+		for (Position<T> temp : positionsInorder()) {
+			if (T.isRoot(temp))
+				break;
+			if (T.isExternal(temp))
+				c++;
+		}
+		return c;
+	}
+
+	// 5. k) Método para contar os nodos direitos e externos de uma árvore binária.
+	public int countRightNodes(LinkedBinaryTree<T> T, Position<T> v) {
+		int c = 0;
+		for (Position<T> temp : positionsDesorder()) {
+			if (T.isRoot(temp))
+				break;
+			if (T.isExternal(temp))
+				c++;
+		}
+		return c;
+	}
+
+	// Max
+	public int Max(int x, int y) {
+		return x > y ? x : y;
+	}
+	// height
+	public int height(LinkedBinaryTree<T> T, Position<T> v) {
+		if (isExternal(v))
+			return 0;
+		else {
+			int h = 0;
+			for (Position<T> w : children(v))
+				h = Max(h, height(T, w));
+			return 1 + h;
+		}
+	}
+	
+	protected int toDraw(T m[][], Position<T> v, int lin, int col) {
+		if (hasLeft(v))
+			col = toDraw(m, left(v), lin+1, col);
+		m[lin][col] = v.element();
+		col+=1;
+		if(hasRight(v))
+			col = toDraw(m, right(v), lin+1, col);
+		return col;
+	}
+	
+	protected void setSizeTree() {
+		for (@SuppressWarnings("unused") Position<T> i : positions()) {
+			this.size++;
+		}
+	}
+	
+	// Desenha a árvore. (exercício 5 letra g)
+	public void drawBinaryTree(LinkedBinaryTree<T> a, Position<T> p) {
+		setSizeTree();
+		@SuppressWarnings("unchecked")
+		T[][] m = (T[][]) new Object[height(a, p) + 1][a.size()];
+		
+		toDraw(m, a.root(), 0, 0);
+		
+		for (int i = 0; i < m.length; i++) {
+			for (int j = 0; j < m[0].length; j++) {
+				if(m[i][j] == null)
+					System.out.printf(" ");
+				else
+					System.out.printf(m[i][j] + "");
+			}
+			System.out.println(); // quebra de linha
+		}
 	}
 }

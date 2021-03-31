@@ -1,10 +1,14 @@
 package tests;
 
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import me.javacourse.BinaryTree.BTNode;
 import me.javacourse.BinaryTree.LinkedBinaryTree;
+import me.javacourse.Exceptions.InvalidPositionException;
 import me.javacourse.Types.Position;
 import me.javacourse.stack.ArrayStack;
 
@@ -12,26 +16,77 @@ class LinkedBinaryTreeTest {
 
 	@Test
 	void test() {
+		System.out.println("\n--- Exercício 5 . a ---");
 		String exp = "((((3+1)*3)/((9-5)+2))-((3*(7-4))+6))";
 		LinkedBinaryTree<Character> t = buildExpression(exp);
+		
+		System.out.println("\n--- Exercício 5 . b ---");
 		// binaryPreorder Test
 		t.binaryPreorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		
+		System.out.println("\n--- Exercício 5 . c ---");
 		// binaryPostorder Test
 		t.binaryPostorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		
+		System.out.println("\n--- Exercício 5 . d ---");
 		// evaluateExpression Test
 		System.out.println(evaluateExpression(t, (BTNode<Character>) t.root()));
+		
+		System.out.println("\n--- Exercício 5 . e ---");
 		// inorder Test
 		t.inorder(t, (BTNode<Character>) t.root());
 		System.out.println();
+		
+		System.out.println("\n--- Exercício 5 . f ---");
 		// makerBTSearch Test
 		makeBTSearchTest();
+		
+		System.out.println("\n--- Exercício 5 . g ---");
+		// drawBinaryTree Test
+		t.drawBinaryTree(t, t.root());
+		
+		System.out.println("\n--- Exercício 5 . h ---");
 		// eulerTour Test
 		t.eulerTour(t, (BTNode<Character>) t.root());
 		System.out.println();
+		
+		System.out.println("\n--- Exercício 5 . i ---");
 		// printExpression Test
 		t.printExpression(t, t.root());
+		
+		System.out.println("\n--- Exercício 5 . j ---");
+		// countLeftNodes Test
+		System.out.println();
+		System.out.println(t.countLeftNodes(t, t.root()));
+		
+		System.out.println("\n--- Exercício 5 . k ---");
+		// countRightNodes Test
+		System.out.println(t.countRightNodes(t, t.root()));
+	}
+	
+	// Exercício 4
+	@Test
+	void binaryTreeTest() {
+		LinkedBinaryTree<String> lbt = new LinkedBinaryTree<String>();
+		lbt.addRoot("Unix");
+		assertEquals("Unix", lbt.root().element(), "Unix");
+		assertEquals("Linux", lbt.insertLeft(lbt.root(), "Linux").element(), "Linux");
+		assertEquals("BSD", lbt.insertRight(lbt.root(), "BSD").element(), "BSD");
+		assertEquals(false, lbt.isEmpty(), "Deveria retornar false");
+		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.isInternal(null); });
+		Position<String> linux = lbt.left(lbt.root());
+		assertEquals("Ubuntu", lbt.insertLeft(linux, "Ubuntu").element(), "Ubuntu");
+		assertEquals("Android", lbt.insertRight(linux, "Android").element(), "Android");
+		Position<String> ubuntu = lbt.left(linux);
+		assertEquals("Ubuntu 13", lbt.insertLeft(ubuntu, "Ubuntu 13").element(), "Ubuntu 13");
+		assertEquals("Ubuntu Touch", lbt.insertRight(ubuntu, "Ubuntu Touch").element(), "Ubuntu Touch");
+		Assertions.assertThrows(InvalidPositionException.class, () -> { lbt.insertLeft(ubuntu, "teste"); });
+		Position<String> bsd = lbt.right(lbt.root());
+		assertEquals("FreeBSD", lbt.insertLeft(bsd, "FreeBSD").element(), "FreeBSD");
+		assertEquals("NetBSD", lbt.insertRight(bsd, "NetBSD").element(), "NetBSD");
+//		lbt.drawBinaryTree(lbt, lbt.root());
 	}
 	
 	// 5. a) buildExpression conforme slide 30.
@@ -95,11 +150,5 @@ class LinkedBinaryTreeTest {
 		LinkedBinaryTree<Integer> search_tree = createTreeSearch();
 		search_tree.makerBTSearch(search_tree, search_tree.root());
 	}
-	
-	/* TODO:
-	 * 5. g) Método que desenhe a árvore binária de expressão conforme slide 47.
-	 * 5. j) Método para contar os nodos esquerdos e externos de uma árvore binária.
-	 * 5. k) Método para contar os nodos direitos e externos de uma árvore binária.
-	 */
 	
 }
